@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Bot, TrendingUp, Wallet, BarChart3, Star } from "lucide-react";
+import { Link } from "wouter";
 
 export default function Landing() {
   return (
@@ -31,13 +32,14 @@ export default function Landing() {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  size="lg"
-                  onClick={() => window.location.href = "/api/login"}
-                  className="bg-gradient-to-r from-betting-gold to-yellow-500 hover:from-yellow-500 hover:to-betting-gold text-lg px-8 py-6"
-                >
-                  Start Betting Free
-                </Button>
+                <Link href="/auth">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-betting-gold to-yellow-500 hover:from-yellow-500 hover:to-betting-gold text-lg px-8 py-6"
+                  >
+                    Start Betting Free
+                  </Button>
+                </Link>
                 <Button
                   size="lg"
                   variant="outline"

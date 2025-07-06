@@ -24,13 +24,12 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
-// User storage table (mandatory for Replit Auth)
+// User storage table (email/password auth)
 export const users = pgTable("users", {
-  id: varchar("id").primaryKey().notNull(),
-  email: varchar("email").unique(),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
-  profileImageUrl: varchar("profile_image_url"),
+  id: serial("id").primaryKey(),
+  username: varchar("username", { length: 50 }).unique().notNull(),
+  email: varchar("email", { length: 100 }).unique().notNull(),
+  password: varchar("password", { length: 255 }).notNull(),
   bankroll: decimal("bankroll", { precision: 10, scale: 2 }).default("10000.00"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -73,7 +72,7 @@ export const predictions = pgTable("predictions", {
 // Bets table
 export const bets = pgTable("bets", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").references(() => users.id),
+  userId: integer("user_id").references(() => users.id),
   gameId: integer("game_id").references(() => games.id),
   predictionId: integer("prediction_id").references(() => predictions.id),
   amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),

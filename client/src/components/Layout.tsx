@@ -4,10 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Sun, Moon, TrendingUp, Wallet } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  bankroll: string;
+}
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, isAuthenticated } = useAuth();
   const { theme, setTheme } = useTheme();
   const [location] = useLocation();
+  
+  const typedUser = user as User | null;
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: TrendingUp },
@@ -50,12 +59,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             )}
 
             <div className="flex items-center space-x-4">
-              {isAuthenticated && user && (
+              {isAuthenticated && typedUser && (
                 <div className="hidden md:flex items-center space-x-3 bg-gray-800 px-4 py-2 rounded-full">
                   <Wallet className="h-4 w-4 text-betting-green" />
                   <span className="text-sm text-gray-300">Balance:</span>
                   <span className="font-bold text-betting-green">
-                    ${parseFloat(user.bankroll || "0").toFixed(2)}
+                    ${parseFloat(typedUser.bankroll || "0").toFixed(2)}
                   </span>
                 </div>
               )}
@@ -72,16 +81,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 )}
               </Button>
               {!isAuthenticated && (
-                <Button
-                  onClick={() => window.location.href = "/api/login"}
-                  className="bg-gradient-to-r from-betting-gold to-yellow-500 hover:from-yellow-500 hover:to-betting-gold"
-                >
-                  Sign In
-                </Button>
+                <Link href="/auth">
+                  <Button
+                    className="bg-gradient-to-r from-betting-gold to-yellow-500 hover:from-yellow-500 hover:to-betting-gold"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
               )}
               {isAuthenticated && (
                 <Button
-                  onClick={() => window.location.href = "/api/logout"}
+                  onClick={async () => {
+                    try {
+                      await fetch("/api/logout", { method: "POST", credentials: "include" });
+                      window.location.href = "/";
+                    } catch (error) {
+                      console.error("Logout failed:", error);
+                    }
+                  }}
                   variant="outline"
                 >
                   Sign Out

@@ -1,11 +1,19 @@
 import { createServer } from "http";
 import { storage } from "./storage.js";
-import { setupAuth, isAuthenticated } from "./replitAuth.js";
+import { setupAuth } from "./auth.js";
 import { espnService } from "./services/espn.js";
 import { predictionManager } from "./services/predictions.js";
 import { bettingService } from "./services/betting.js";
 import { placeBetSchema } from "../shared/schema.js";
 import { ZodError } from "zod";
+
+// Middleware to check if user is authenticated
+function isAuthenticated(req, res, next) {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  next();
+}
 
 async function registerRoutes(app) {
   // Auth middleware
