@@ -1,10 +1,19 @@
 import express from "express";
 import { registerRoutes } from "./routes.js";
 import { setupVite, serveStatic, log } from "./vite.js";
+import cors from "cors";
+
 
 const app = express();
+app.use(cors({
+  origin: 'http://localhost:5173', // Allow all origins, adjust as needed for security
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Adjust headers as needed
+  credentials: true, // Allow credentials if needed
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+console.log("HERERERER");
 
 app.use((req, res, next) => {
   const start = Date.now();
