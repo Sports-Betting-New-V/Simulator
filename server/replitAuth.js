@@ -31,13 +31,13 @@ function getSession() {
     tableName: "sessions",
   });
   return session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'development-secret-key-change-in-production',
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: sessionTtl,
     },
   });
