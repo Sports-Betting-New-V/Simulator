@@ -1,0 +1,229 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Sports Betting Theme Colors */
+  --betting-dark: hsl(222, 84%, 5%);
+  --betting-darker: hsl(220, 13%, 9%);
+  --betting-gold: hsl(45, 93%, 47%);
+  --betting-green: hsl(159, 64%, 39%);
+  --betting-red: hsl(0, 73%, 41%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(217, 33%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 84%, 5%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(222, 84%, 5%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(217, 33%, 17%);
+  --input: hsl(217, 33%, 17%);
+  --primary: hsl(45, 93%, 47%);
+  --primary-foreground: hsl(222, 84%, 5%);
+  --secondary: hsl(217, 33%, 17%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(217, 33%, 17%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 73%, 41%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(217, 33%, 17%);
+  --radius: 0.5rem;
+  
+  /* Sports Betting Theme Colors - Dark Mode */
+  --betting-dark: hsl(222, 84%, 5%);
+  --betting-darker: hsl(220, 13%, 9%);
+  --betting-gold: hsl(45, 93%, 47%);
+  --betting-green: hsl(159, 64%, 39%);
+  --betting-red: hsl(0, 73%, 41%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+  
+  /* Sports Betting Specific Styles */
+  .betting-gradient-gold {
+    background: linear-gradient(135deg, hsl(45, 93%, 47%) 0%, hsl(38, 92%, 50%) 100%);
+  }
+  
+  .betting-gradient-green {
+    background: linear-gradient(135deg, hsl(159, 64%, 39%) 0%, hsl(142, 71%, 45%) 100%);
+  }
+  
+  .betting-gradient-primary {
+    background: linear-gradient(135deg, hsl(45, 93%, 47%) 0%, hsl(159, 64%, 39%) 100%);
+  }
+  
+  .betting-card-glow {
+    box-shadow: 0 0 20px hsl(45, 93%, 47%, 0.15);
+  }
+  
+  .betting-border-gold {
+    border-color: hsl(45, 93%, 47%, 0.3);
+  }
+  
+  .betting-border-green {
+    border-color: hsl(159, 64%, 39%, 0.3);
+  }
+  
+  /* Custom Utilities for Sports Betting Theme */
+  .text-betting-gold {
+    color: hsl(45, 93%, 47%);
+  }
+  
+  .text-betting-green {
+    color: hsl(159, 64%, 39%);
+  }
+  
+  .text-betting-red {
+    color: hsl(0, 73%, 41%);
+  }
+  
+  .bg-betting-dark {
+    background-color: hsl(222, 84%, 5%);
+  }
+  
+  .bg-betting-darker {
+    background-color: hsl(220, 13%, 9%);
+  }
+  
+  .bg-betting-gold {
+    background-color: hsl(45, 93%, 47%);
+  }
+  
+  .bg-betting-green {
+    background-color: hsl(159, 64%, 39%);
+  }
+  
+  .bg-betting-red {
+    background-color: hsl(0, 73%, 41%);
+  }
+  
+  /* Hover States */
+  .hover\:text-betting-gold:hover {
+    color: hsl(45, 93%, 47%);
+  }
+  
+  .hover\:text-betting-green:hover {
+    color: hsl(159, 64%, 39%);
+  }
+  
+  .hover\:bg-betting-gold:hover {
+    background-color: hsl(45, 93%, 47%);
+  }
+  
+  .hover\:bg-betting-green:hover {
+    background-color: hsl(159, 64%, 39%);
+  }
+  
+  /* Border Colors */
+  .border-betting-gold {
+    border-color: hsl(45, 93%, 47%);
+  }
+  
+  .border-betting-green {
+    border-color: hsl(159, 64%, 39%);
+  }
+  
+  .border-betting-red {
+    border-color: hsl(0, 73%, 41%);
+  }
+  
+  /* Gradient Text */
+  .text-gradient-betting {
+    background: linear-gradient(135deg, hsl(45, 93%, 47%) 0%, hsl(159, 64%, 39%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Animation for betting elements */
+  .betting-pulse {
+    animation: betting-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes betting-pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  
+  /* Custom scrollbar for betting theme */
+  .betting-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .betting-scrollbar::-webkit-scrollbar-track {
+    background: hsl(217, 33%, 17%);
+    border-radius: 3px;
+  }
+  
+  .betting-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(45, 93%, 47%);
+    border-radius: 3px;
+  }
+  
+  .betting-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(38, 92%, 50%);
+  }
+}
+
+/* Custom component styles for sports betting */
+@layer components {
+  .btn-betting-primary {
+    @apply bg-gradient-to-r from-betting-gold to-yellow-500 hover:from-yellow-500 hover:to-betting-gold text-white font-semibold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg;
+  }
+  
+  .btn-betting-secondary {
+    @apply border-2 border-betting-green text-betting-green hover:bg-betting-green hover:text-white font-semibold py-2 px-4 rounded-full transition-all duration-300;
+  }
+  
+  .card-betting {
+    @apply bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 shadow-xl;
+  }
+  
+  .card-betting-highlight {
+    @apply bg-gradient-to-br from-betting-gold/10 to-betting-green/10 border border-betting-gold/20 rounded-xl p-6 shadow-xl backdrop-blur-sm;
+  }
+  
+  .input-betting {
+    @apply bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-betting-gold focus:outline-none focus:ring-2 focus:ring-betting-gold/20;
+  }
+  
+  .select-betting {
+    @apply bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-betting-gold focus:outline-none focus:ring-2 focus:ring-betting-gold/20;
+  }
+}
