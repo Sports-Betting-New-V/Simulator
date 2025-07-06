@@ -1,9 +1,7 @@
 import { createServer } from "http";
 import { storage } from "./storage.js";
 import { setupAuth } from "./auth.js";
-import { espnService } from "./services/espn.js";
-import { predictionManager } from "./services/predictions.js";
-import { bettingService } from "./services/betting.js";
+import { demoDataService } from "./services/demo-data-service.js";
 import { placeBetSchema } from "../shared/schema.js";
 import { ZodError } from "zod";
 
@@ -19,23 +17,11 @@ async function registerRoutes(app) {
   // Auth middleware
   await setupAuth(app);
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
-
   // User stats endpoint
   app.get('/api/user/stats', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const stats = await bettingService.getUserStats(userId);
+      const userId = req.user.id;
+      const stats = await demoDataService.getUserStats(userId);
       res.json(stats);
     } catch (error) {
       console.error("Error fetching user stats:", error);
@@ -49,30 +35,7 @@ async function registerRoutes(app) {
       const limit = parseInt(req.query.limit) || 20;
       const sport = req.query.sport;
       
-      // First, try to get games from database
-      let games = await storage.getUpcomingGames(limit);
-      
-      // If we don't have enough games, fetch from ESPN
-      if (games.length < limit / 2) {
-        console.log("Fetching fresh games from ESPN...");
-        const espnGames = sport 
-          ? await espnService.getGames(sport, limit)
-          : await espnService.getAllSportsGames(limit);
-        
-        // Save new games to database
-        for (const gameData of espnGames) {
-          try {
-            await storage.insertGame(gameData);
-          } catch (error) {
-            // Game might already exist, skip
-            continue;
-          }
-        }
-        
-        // Fetch updated games from database
-        games = await storage.getUpcomingGames(limit);
-      }
-      
+      const games = await demoDataService.getGames(limit, sport);
       res.json(games);
     } catch (error) {
       console.error("Error fetching games:", error);
@@ -83,18 +46,7 @@ async function registerRoutes(app) {
   app.get('/api/games/predictions', async (req, res) => {
     try {
       const limit = parseInt(req.query.limit) || 10;
-      
-      // Get recent games
-      const games = await storage.getUpcomingGames(20);
-      
-      // Generate predictions for games that don't have them
-      if (games.length > 0) {
-        await predictionManager.generatePredictionsForGames(games);
-      }
-      
-      // Get predictions with game data
-      const predictions = await predictionManager.getTopPredictions(limit);
-      
+      const predictions = await demoDataService.getPredictions(limit);
       res.json(predictions);
     } catch (error) {
       console.error("Error fetching predictions:", error);
@@ -105,10 +57,10 @@ async function registerRoutes(app) {
   // Betting endpoints
   app.post('/api/bets', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const validatedData = placeBetSchema.parse(req.body);
       
-      const result = await bettingService.placeBet(userId, validatedData);
+      const result = await demoDataService.placeBet({ userId, ...validatedData });
       
       res.json({
         message: "Bet placed successfully",
@@ -133,10 +85,10 @@ async function registerRoutes(app) {
 
   app.get('/api/bets', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const limit = parseInt(req.query.limit) || 50;
       
-      const bets = await storage.getUserBets(userId, limit);
+      const bets = await demoDataService.getUserBets(userId, limit);
       res.json(bets);
     } catch (error) {
       console.error("Error fetching bets:", error);
@@ -146,10 +98,10 @@ async function registerRoutes(app) {
 
   app.get('/api/bets/recent', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const limit = parseInt(req.query.limit) || 5;
       
-      const bets = await storage.getRecentBets(userId, limit);
+      const bets = await demoDataService.getRecentBets(userId, limit);
       res.json(bets);
     } catch (error) {
       console.error("Error fetching recent bets:", error);
@@ -161,7 +113,7 @@ async function registerRoutes(app) {
   app.post('/api/games/:id/simulate', isAuthenticated, async (req, res) => {
     try {
       const gameId = parseInt(req.params.id);
-      const results = await bettingService.simulateGameResults(gameId);
+      const results = await demoDataService.simulateGameResults(gameId);
       
       res.json({
         message: "Game simulated successfully",
